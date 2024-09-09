@@ -1,4 +1,4 @@
-import { Roboto } from "next/font/google";
+import { Roboto } from 'next/font/google';
 
 export const fontRoboto = Roboto({
   weight: ["400","700", "900"],

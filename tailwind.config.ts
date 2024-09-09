@@ -8,17 +8,46 @@ const config: Config = {
   ],
 
   theme: {
+    screens: {
+      xl: { max: "1460px" },
+      // => @media (max-width: 1527px) { ... }
+
+      lg: { max: "991px" },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: "767px" },
+      // => @media (max-width: 767px) { ... }
+
+      sm: { max: "639px" },
+      // => @media (max-width: 639px) { ... }
+    },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      container: {
+        center: true,
+        padding: "15px",
+      },
+      colors: {
+        accent: "#FE4E01",
+        siteGray: "#787889",
+        siteDark: "#0D0D16",
+      },
+      borderWidth: {
+        DEFAULT: "1px",
+        1: "1px",
+        2: "2px",
+        3: "3px",
+        4: "4px",
+        5: "5px",
+        6: "6px",
+        7: "7px",
+        8: "8px",
+        10: "10px",
       },
       fontFamily: {
         roboto: ["var(--font-roboto)"],
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms"), require("tailwindcss-inner-border")],
 };
 export default config;

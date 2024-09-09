@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import {fontRoboto} from "@/lib/fonts";
+import AuthListener from "@/app/AuthListener";
 import "./globals.css";
+import AuthModal from "@/app/(public)/components/Modals/AuthModal";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <body className={`${fontRoboto.variable} font-roboto`}>{children}</body>
+      <body className={`${fontRoboto.variable} font-roboto`}>
+      {children}
+      <AuthModal />
+      </body>
     </html>
   );
 }

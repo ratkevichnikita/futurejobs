@@ -1,10 +1,11 @@
-import Image from "next/image";
+import AuthListener from "@/app/AuthListener";
 
-export default function Home() {
+
+export default async function() {
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      hello world
+    <main className="px-[15px] py-[20px]">
+      <AuthListener />
     </main>
-
   );
 }
