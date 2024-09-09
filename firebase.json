@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "public": "build",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "nextjs"
+      }
+    ]
+  },
+  "functions": {
+    "source": "functions"
+  }
+}

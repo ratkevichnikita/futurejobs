@@ -1,8 +1,10 @@
 "use client"
 import { Dialog, Transition } from "@headlessui/react"
-import {AuthStore, storeSetModalActive} from "@/shared/store/AuthStore";
-import Login from "@/app/(public)/components/Modals/AuthModal/Login";
-import Registration from "@/app/(public)/components/Modals/AuthModal/Registration";
+import {AuthStore,storeSetModalContent,storeSetModalActive} from "@/src/shared/store/AuthStore";
+import Login from "@/src/app/(public)/components/Modals/AuthModal/Login";
+import Registration from "@/src/app/(public)/components/Modals/AuthModal/Registration";
+import Image from "next/image";
+import IconClose from "@/public/images/icons/icon-close.webp"
 
 const AuthModal = () => {
   const { authModalActive, authModalContent } = AuthStore.useState((store) => store);
@@ -17,6 +19,8 @@ const AuthModal = () => {
         return <Login />
     }
   }
+
+  const closeAuthModal = () => storeSetModalActive(false)
 
   return (
     <Transition
@@ -40,7 +44,19 @@ const AuthModal = () => {
             leaveTo="opacity-0 scale-100"
           >
             <Dialog.Panel className="flex h-full w-full transform flex-col overflow-hidden overflow-y-auto pt-[8.566vw]  text-left align-middle transition-all sm:pt-[0]">
-              <div className="flex flex-col items-center justify-center sm:flex-1">{renderContent()}</div>
+              <div className="flex flex-col items-center justify-center sm:flex-1">
+                <div className="bg-white p-[50px] space-y-[10px] relative">
+                  <Image
+                    src={IconClose.src}
+                    width={IconClose.width}
+                    height={IconClose.height}
+                    onClick={closeAuthModal}
+                    alt="close icon"
+                    className="absolute right-[10px] top-[10px] w-[0.981vw] h-[0.981vw] cursor-pointer transition-transform scale-[1.15]"
+                  />
+                  {renderContent()}
+                </div>
+              </div>
             </Dialog.Panel>
           </Transition.Child>
         </div>

@@ -1,27 +1,23 @@
-"use client"
-import {useEffect, useState} from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebaseConfig";
-import { AuthStore } from "@/shared/store/AuthStore";
-import {useRouter} from "next/navigation";
-import PrivateHome from "@/app/(private)/PrivateHome";
-import PublicHome from "@/app/(public)/PublicHome";
+"use client";
+import { useEffect, useState } from "react";
+import { AuthStore } from "@/src/shared/store/AuthStore";
+import PrivateHome from "@/src/app/(private)/PrivateHome";
+import PublicHome from "@/src/app/(public)/PublicHome";
 
 const AuthListener = () => {
   const { user } = AuthStore.useState((store) => store);
-  const [isAuth,setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    if(user || accessToken) setIsAuth(true)
-  }, [user])
-
+    setIsAuth(!!user || !!accessToken);
+  }, [user]); 
 
   return (
     <>
-      {isAuth ? <PrivateHome/> : <PublicHome />}
+      {isAuth ? <PrivateHome /> : <PublicHome />}
     </>
-  )
+  );
 };
 
 export default AuthListener;

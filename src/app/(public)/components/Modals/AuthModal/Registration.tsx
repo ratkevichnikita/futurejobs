@@ -1,66 +1,70 @@
-// pages/register.tsx
-import { useState } from "react";
-import { createUserWithEmailAndPassword,sendEmailVerification,updateProfile } from "firebase/auth";
-import { auth } from "@/firebaseConfig";
-import {FirebaseUser} from "@/shared/types/FirebaseUser";
-import {SetUserAuth, storeSetModalActive, storeSetModalContent} from "@/shared/store/AuthStore";
+import {SetUserAuth, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
+import {useForm} from "react-hook-form";
+import {AuthRegisterUser} from "@/src/shared/api/api";
+import {setAuthData} from "@/src/shared/helper/setAuthData";
+
+export interface RegisterData {
+  nickname: string
+  email: string
+  password: string
+}
 
 const Register = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const handleRegister = async () => {
+  const onSubmit = async (data:RegisterData) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await sendEmailVerification(userCredential.user)
-        .then(() => {
-          console.log('Verification email sent!');
-        })
-        .catch((error) => {
-          console.error('Error sending verification email:', error);
-          setError(error.message);
-        });
-      await updateProfile(userCredential.user, {displayName: nickname,});
-      const user:FirebaseUser = userCredential.user as FirebaseUser;
-
-      if(user && user.emailVerified) {
-        console.log('user',user)
-        localStorage.setItem('accessToken', user.accessToken);
-        storeSetModalContent(null);
-        storeSetModalActive(false);
-        SetUserAuth(user)
+      const user = await AuthRegisterUser(data);
+      if(user && user.accessToken) {
+        setAuthData(user);
+        reset();
       }
     } catch (err) {
-      setError((err as Error).message);
+      console.log('error', (err as Error).message)
     }
   };
 
   return (
-    <div className="bg-white p-[50px] space-y-[10px] flex flex-col">
-      <h1 className="text-center">Register</h1>
-      <input
-        type="text"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-        placeholder="Nickname"
-      />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button className="border-[1px] border-accent py-[5px] bg-accent text-white" onClick={handleRegister}>Register</button>
-      {error && <p>{error}</p>}
-    </div>
+   <>
+      <h1 className="text-center">Регистрация</h1>
+      <form className="flex flex-col space-y-[10px]" onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <input
+            type="text"
+            placeholder="Nickname"
+            {...register('nickname', {
+              required: 'Поле обязательно для заполнения',
+              minLength: {
+                value: 3,
+                message: 'Минимальное количество символов = 3'
+              }
+            })}
+          />
+          {errors.nickname && <p className="text-[0.781vw] text-error m-0">{errors.nickname.message as string}</p>}
+        </div>
+        <div>
+          <input
+            type="email"
+            placeholder="Email"
+            {...register('email', { required: 'Поле обязательно для заполнения' })}
+          />
+          {errors.email && <p className="text-[0.781vw] text-error m-0">{errors.email.message as string}</p>}
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="Пароль"
+            {...register('password', {
+              required: 'Поле обязательно для заполнения',
+              minLength: { value: 6, message: 'Пароль должен быть мнимум 6 символа' }
+            })}
+          />
+          {errors.password && <p className="text-[0.781vw] text-error m-0">{errors.password.message as string}</p>}
+        </div>
+        <button className="border-[1px] border-accent py-[5px] bg-accent text-white" type="submit">Зарегистрироваться</button>
+        {/*{error && <p>{error}</p>}*/}
+      </form>
+   </>
   );
 };
 

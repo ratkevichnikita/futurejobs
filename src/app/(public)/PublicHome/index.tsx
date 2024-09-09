@@ -1,10 +1,9 @@
-"use client"
 import React from 'react';
-import {storeSetModalActive,storeSetModalContent} from "@/shared/store/AuthStore";
+import {storeSetModalActive,storeSetModalContent} from "@/src/shared/store/AuthStore";
 
 const PublicHome = () => {
 
-  const onHandleAuth = (value:string) => {
+  const onHandleAuth = (value:'login' | 'register' | null) => {
     storeSetModalActive(true)
     storeSetModalContent(value)
   }

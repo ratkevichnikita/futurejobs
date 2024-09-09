@@ -1,11 +1,11 @@
-import AuthListener from "@/app/AuthListener";
+import AuthListener from "@/src/app/AuthListener";
 
-
-export default async function() {
-
+const MainPage = () => {
   return (
     <main className="px-[15px] py-[20px]">
       <AuthListener />
     </main>
   );
 }
+
+export default MainPage

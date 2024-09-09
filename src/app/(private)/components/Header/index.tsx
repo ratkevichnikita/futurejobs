@@ -1,6 +1,6 @@
 import React from 'react';
-import Resources from "@/app/(private)/components/Resources";
-import Profile from "@/app/(private)/components/Profile";
+import Resources from "@/src/app/(private)/components/Resources";
+import Profile from "@/src/app/(private)/components/Profile";
 
 const Header = () => {
   const resources = [

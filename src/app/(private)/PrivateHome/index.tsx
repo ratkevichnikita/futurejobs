@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from "@/app/(private)/components/Header";
+import Header from "@/src/app/(private)/components/Header";
 
 const PrivateHome = () => {
   return (

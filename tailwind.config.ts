@@ -30,6 +30,8 @@ const config: Config = {
         accent: "#FE4E01",
         siteGray: "#787889",
         siteDark: "#0D0D16",
+        warning: "#f9e154",
+        error: "#f02c2c"
       },
       borderWidth: {
         DEFAULT: "1px",

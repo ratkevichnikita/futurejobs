@@ -1,12 +1,23 @@
 import React from 'react';
 import user from '../../../../../public/images/user.webp'
 import Image from "next/image";
+import clsx from "clsx";
+import {SetUserAuth} from "@/src/shared/store/AuthStore";
 
 const Profile = () => {
+
+  const logout = () => {
+    SetUserAuth(null);
+    localStorage.removeItem('accessToken');
+  }
+
   return (
     <div className={"flex items-center"}>
       <div className="relative">
-        <div className="relative w-[2.572vw] h-[2.572vw] rounded-full overflow-hidden">
+        <div className={clsx("bg-white p-[10px] absolute left-[50%] top-[50%] z-[20] cursor-pointer shadow-lg", {})}>
+          <button type="button" onClick={logout} className="text-[0.781vw]">Выйти</button>
+        </div>
+        <div className="relative w-[2.572vw] h-[2.572vw] rounded-full overflow-hidden cursor-pointer duration-300 transition-transform hover:scale-[1.15] ">
           <Image
             src={user.src}
             fill
