@@ -28,9 +28,8 @@ export const useUserData = () => {
       }
     });
 
-    // Очистка подписки на слушателя аутентификации
     return () => unsubscribe();
   }, []);
 
-  return { userData, loading, error }; // Возвращаем данные, статус загрузки и возможную ошибку
+  return { userData, loading, error };
 };

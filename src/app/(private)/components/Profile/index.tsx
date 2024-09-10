@@ -2,11 +2,13 @@ import React from 'react';
 import User from '@/public/images/user.webp'
 import Image from "next/image";
 import clsx from "clsx";
-import {AuthStore, SetUserAuth} from "@/src/shared/store/AuthStore";
+import {SetUserAuth} from "@/src/shared/store/AuthStore";
 import {AuthLogout} from "@/src/shared/api/api";
+import {getUserLevel, UserProgress} from "@/src/shared/helper/calculateUserLevel";
 
-const Profile = () => {
-  const {user} = AuthStore.useState((store) => store)
+const Profile = ({name,experience,power}) => {
+
+  const userProgress: UserProgress = getUserLevel(experience);
 
   const logout = async () => {
     await AuthLogout();
@@ -29,15 +31,18 @@ const Profile = () => {
             className="inset-0 z-10 h-full w-full rounded object-cover"
           />
         </div>
-        <span className="text-[0.491vw] flex items-center justify-center w-[15px] h-[15px] bg-white z-[20] absolute right-[-7px] top-0 rounded-full border-[1px] border-accent">1</span>
+        <span className="text-[0.491vw] flex items-center justify-center w-[15px] h-[15px] bg-white z-[20] absolute right-[-7px] top-0 rounded-full border-[1px] border-accent">
+          {userProgress.level}
+        </span>
       </div>
       <div>
-        <p className="text-[0.781vw] ml-[0.781vw]">{user?.displayName}</p>
-        <div className="w-[100px] h-[10px] text-[0.461vw] text-center border-[1px] border-accent rounded-[0.150vw] ml-[-5px] pl-[5px]">
-          20%
+        <p className="text-[0.781vw] ml-[0.781vw]">{name}</p>
+        <div className="relative w-[100px] h-[10px] text-[0.461vw] text-center border-[1px] border-accent rounded-[0.150vw] ml-[-5px] pl-[5px]">
+          <span style={{width: `${userProgress.progressPercentage}%`}} className={clsx("block h-full transition-all bg-accent absolute left-0 top-0", {})} />
+          {userProgress.progressPercentage}%
         </div>
         <div>
-          <p className="text-[0.581vw]">Сила игрока: <span className="font-bold text-accent">1000</span></p>
+          <p className="text-[0.581vw]">Сила игрока: <span className="font-bold text-accent">{power}</span></p>
         </div>
       </div>
       {/*<div className="relative ml-[10px] text-[0.781vw]">*/}

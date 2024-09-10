@@ -11,7 +11,6 @@ const PrivateHome = () => {
       <div className="container">
         Основной контент
       </div>
-
     </div>
   );
 };
