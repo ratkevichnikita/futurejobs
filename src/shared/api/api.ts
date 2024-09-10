@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut} from "firebase/auth";
 import {auth, db} from "@/src/firebaseConfig";
 import {FirebaseUser} from "@/src/shared/types/FirebaseUser";
-import {doc, setDoc} from "firebase/firestore";
+import {doc, setDoc, getDoc} from "firebase/firestore";
 import {RegisterData} from "@/src/app/(public)/components/Modals/AuthModal/Registration";
 import {LoginData} from "@/src/app/(public)/components/Modals/AuthModal/Login";
 
@@ -27,6 +27,7 @@ export const AuthRegisterUser = async (data: RegisterData) => {
         energy: 80,
         rubies: 20,
       },
+      power: 100,
       experience: 0,
       createdAt: new Date(),
     });
@@ -41,9 +42,36 @@ export const AuthRegisterUser = async (data: RegisterData) => {
 
 export const AuthLoginUser = async (data:LoginData) => {
   const resp = await signInWithEmailAndPassword(auth, data.email, data.password);
-  const user:FirebaseUser = resp.user
+  const user:FirebaseUser = resp.user;
   return user
 }
+
+export const AuthLogout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Ошибка выхода из системы:', error);
+  }
+};
+
+export const getUserData = async (uid: string) => {
+  try {
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      return userDoc.data();
+    } else {
+      console.error('Пользователь не найден');
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка получения данных пользователя:', error);
+    return null;
+  }
+};
+
+
 
 
 

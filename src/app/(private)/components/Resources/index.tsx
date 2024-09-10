@@ -1,21 +1,19 @@
 import React from 'react';
 
-type ResourceType = {
-  name: string
-  count: number
-  image: string
-}
-
 interface ComponentProps {
-  resources: ResourceType[] | null
+  resources: {
+    silver: number
+    energy: number
+    rubies: number
+  }
 }
 
 const Resources = ({resources}:ComponentProps) => {
   return (
     <div className="flex gap-[0.391vw]">
-      {(resources && resources.length > 0) && resources.map(r => {
-        return <div key={r.name}>{r.name} {r.count}</div>
-      })}
+      <div>{resources.silver}</div>
+      <div>{resources.energy}</div>
+      <div>{resources.rubies}</div>
     </div>
   );
 };

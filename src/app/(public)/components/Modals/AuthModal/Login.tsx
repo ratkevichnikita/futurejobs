@@ -25,7 +25,7 @@ const Login = () => {
   }
   return (
     <div className="bg-white p-[50px] space-y-[10px]">
-      <h1 className="text-center">Login</h1>
+      <h1 className="text-center">Вход</h1>
       <form className="flex flex-col space-y-[10px]" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <input
@@ -46,7 +46,7 @@ const Login = () => {
           />
           {errors.password && <p className="text-[0.781vw] text-error m-0">{errors.password.message as string}</p>}
         </div>
-        <button type="submit" className="border-[1px] border-accent py-[5px] bg-accent text-white">Log In</button>
+        <button type="submit" className="border-[1px] border-accent py-[5px] bg-accent text-white">Войти</button>
       </form>
       {/*{error && <p>{error}</p>}*/}
     </div>

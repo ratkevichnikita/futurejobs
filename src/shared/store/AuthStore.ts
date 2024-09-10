@@ -6,6 +6,7 @@ interface AuthStoreProps {
   loading: boolean
   authModalActive: boolean
   authModalContent: 'login' | 'register' | null
+  userData: any
 }
 
 export const storeSetModalActive = (value: boolean) => {
@@ -23,6 +24,13 @@ export const storeSetModalContent = (value: 'login' | 'register' | null) => {
 export const SetUserAuth = (value: FirebaseUser | null) => {
   AuthStore.update((store) => {
     store.user = value
+  })
+
+}
+
+export const serUserData = (value: any) => {
+  AuthStore.update((store) => {
+    store.userData = value
   })
 }
 

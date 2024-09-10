@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import {fontRoboto} from "@/lib/fonts";
-import AuthListener from "@/app/AuthListener";
+import {fontRoboto} from "@/src/lib/fonts";
 import "./globals.css";
-import AuthModal from "@/app/(public)/components/Modals/AuthModal";
+import AuthModal from "@/src/app/(public)/components/Modals/AuthModal";
 
 export const metadata: Metadata = {
   title: "Create Next App",

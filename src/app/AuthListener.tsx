@@ -1,21 +1,19 @@
-"use client";
-import { useEffect, useState } from "react";
-import { AuthStore } from "@/src/shared/store/AuthStore";
+"use client"
+import React from "react";
 import PrivateHome from "@/src/app/(private)/PrivateHome";
 import PublicHome from "@/src/app/(public)/PublicHome";
+import {useUserData} from "@/src/shared/hooks/useUserData";
 
 const AuthListener = () => {
-  const { user } = AuthStore.useState((store) => store);
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const { userData, loading } = useUserData();
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    setIsAuth(!!user || !!accessToken);
-  }, [user]); 
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <>
-      {isAuth ? <PrivateHome /> : <PublicHome />}
+      {userData ? <PrivateHome /> : <PublicHome />}
     </>
   );
 };
