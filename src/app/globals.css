@@ -20,6 +20,11 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
+/*.main {*/
+/*  height: min(100vh,832px);*/
+/*  width: min(57.5vw,1472px);*/
+/*}*/
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
