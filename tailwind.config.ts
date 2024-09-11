@@ -31,7 +31,7 @@ const config: Config = {
         siteGray: "#787889",
         siteDark: "#0D0D16",
         warning: "#f9e154",
-        error: "#f02c2c"
+        error: "#ff4d4f"
       },
       borderWidth: {
         DEFAULT: "1px",

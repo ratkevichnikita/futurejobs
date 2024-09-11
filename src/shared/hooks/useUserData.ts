@@ -2,12 +2,14 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/src/firebaseConfig";
-import { getUserData } from "@/src/shared/api/api";
+import {getGiftsByDayRange, getUserData} from "@/src/shared/api/api";
+import {GiftForVisiting} from "@/src/shared/types/Gifts";
 
 export const useUserData = () => {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [gifts, setGifts] = useState<GiftForVisiting[] | []>([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -15,6 +17,8 @@ export const useUserData = () => {
         try {
           setLoading(true);
           const fetchedUserData = await getUserData(user.uid);
+          const giftsData = await getGiftsByDayRange();
+          setGifts(giftsData)
           setUserData(fetchedUserData);
         } catch (err) {
           console.error('Ошибка получения данных пользователя:', err);
@@ -31,5 +35,5 @@ export const useUserData = () => {
     return () => unsubscribe();
   }, []);
 
-  return { userData, loading, error };
+  return { userData, loading, error, gifts };
 };

@@ -2,9 +2,10 @@ import axios from 'axios';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut} from "firebase/auth";
 import {auth, db} from "@/src/firebaseConfig";
 import {FirebaseUser} from "@/src/shared/types/FirebaseUser";
-import {doc, setDoc, getDoc} from "firebase/firestore";
+import {doc, setDoc, getDoc, collection, getDocs, collectionGroup} from "firebase/firestore";
 import {RegisterData} from "@/src/app/(public)/components/Modals/AuthModal/Registration";
 import {LoginData} from "@/src/app/(public)/components/Modals/AuthModal/Login";
+import {GiftForVisiting} from "@/src/shared/types/Gifts";
 
 export const AuthRegisterUser = async (data: RegisterData) => {
   try {
@@ -23,8 +24,8 @@ export const AuthRegisterUser = async (data: RegisterData) => {
       email: user.email,
       displayName: data.nickname,
       resources: {
-        silver: 1000,
-        energy: 80,
+        silver: 50000,
+        energy: 18,
         rubies: 20,
       },
       power: 100,
@@ -71,7 +72,25 @@ export const getUserData = async (uid: string) => {
   }
 };
 
+export const getGiftsByDayRange = async (): Promise<{ name: string; options: any[] }[]> => {
+  try {
+    const giftsCollectionRef = collection(db, 'gifts');
+    const giftsSnapshot = await getDocs(giftsCollectionRef);
 
+    const results: GiftForVisiting[] = [];
 
+    giftsSnapshot.forEach((doc) => {
+      const data = doc.data();
+      const options = Object.keys(data).map((key) => data[key]);
+      results.push({
+        name: doc.id,
+        options: options
+      });
+    });
 
-
+    return results;
+  } catch (error) {
+    console.error("Ошибка при получении подарков:", error);
+    return [];
+  }
+};

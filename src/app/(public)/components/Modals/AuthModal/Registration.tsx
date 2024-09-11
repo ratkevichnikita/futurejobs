@@ -1,7 +1,9 @@
-import {SetUserAuth, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import {useForm} from "react-hook-form";
 import {AuthRegisterUser} from "@/src/shared/api/api";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
+import {AuthStore, setAuthLoading} from "@/src/shared/store/AuthStore";
+import Spinner from "@/src/shared/ui/Spinner/Spinner";
+import React from "react";
 
 export interface RegisterData {
   nickname: string
@@ -11,16 +13,20 @@ export interface RegisterData {
 
 const Register = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { loading } = AuthStore.useState((store) => store);
 
   const onSubmit = async (data:RegisterData) => {
     try {
+      setAuthLoading(true)
       const user = await AuthRegisterUser(data);
       if(user && user.accessToken) {
         setAuthData(user);
+        setAuthLoading(false)
         reset();
       }
     } catch (err) {
       console.log('error', (err as Error).message)
+      setAuthLoading(false)
     }
   };
 
@@ -62,6 +68,7 @@ const Register = () => {
           {errors.password && <p className="text-[0.781vw] text-error m-0">{errors.password.message as string}</p>}
         </div>
         <button className="border-[1px] border-accent py-[5px] bg-accent text-white" type="submit">Зарегистрироваться</button>
+        {loading && <Spinner />}
         {/*{error && <p>{error}</p>}*/}
       </form>
    </>

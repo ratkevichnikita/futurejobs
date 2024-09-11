@@ -1,6 +1,7 @@
 {
   "projects": {
-    "vikings": "battle-of-vikings"
+    "vikings": "battle-of-vikings",
+    "default": "battle-of-vikings"
   },
   "targets": {},
   "etags": {},

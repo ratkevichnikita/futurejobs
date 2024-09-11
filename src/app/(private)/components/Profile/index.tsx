@@ -41,9 +41,9 @@ const Profile = ({name,experience,power}) => {
           <span style={{width: `${userProgress.progressPercentage}%`}} className={clsx("block h-full transition-all bg-accent absolute left-0 top-0", {})} />
           {userProgress.progressPercentage}%
         </div>
-        <div>
-          <p className="text-[0.581vw]">Сила игрока: <span className="font-bold text-accent">{power}</span></p>
-        </div>
+        {/*<div>*/}
+        {/*  <p className="text-[0.581vw]">Сила игрока: <span className="font-bold text-accent">{power}</span></p>*/}
+        {/*</div>*/}
       </div>
       {/*<div className="relative ml-[10px] text-[0.781vw]">*/}
       {/*  XP*/}

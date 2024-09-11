@@ -34,6 +34,12 @@ export const serUserData = (value: any) => {
   })
 }
 
+export const setAuthLoading = (value: any) => {
+  AuthStore.update((store) => {
+    store.loading = value
+  })
+}
+
 export const AuthStore = new Store<AuthStoreProps>({
   user: null,
   loading: false,

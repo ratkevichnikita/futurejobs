@@ -1,8 +1,9 @@
 import React from 'react';
-import {SetUserAuth, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import {useForm} from "react-hook-form";
 import {AuthLoginUser} from "@/src/shared/api/api";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
+import {AuthStore, setAuthLoading} from "@/src/shared/store/AuthStore";
+import Spinner from "@/src/shared/ui/Spinner/Spinner";
 
 export interface LoginData {
   email: string
@@ -11,16 +12,20 @@ export interface LoginData {
 
 const Login = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { loading } = AuthStore.useState((store) => store);
 
   const onSubmit = async (data:LoginData) => {
     try {
+      setAuthLoading(true)
       const user = await AuthLoginUser(data)
       if(user && user.accessToken) {
         setAuthData(user);
+        setAuthLoading(false)
         reset()
       }
     } catch (err:any) {
       console.log('error', err.message)
+      setAuthLoading(false)
     }
   }
   return (
@@ -48,6 +53,7 @@ const Login = () => {
         </div>
         <button type="submit" className="border-[1px] border-accent py-[5px] bg-accent text-white">Войти</button>
       </form>
+      {loading && <Spinner />}
       {/*{error && <p>{error}</p>}*/}
     </div>
   );
