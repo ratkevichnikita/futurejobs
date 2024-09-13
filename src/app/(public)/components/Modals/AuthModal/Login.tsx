@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
 import {AuthLoginUser} from "@/src/shared/api/api";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
-import {AuthStore, setAuthLoading} from "@/src/shared/store/AuthStore";
+import {AuthStore, setAuthLoading, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import Spinner from "@/src/shared/ui/Spinner/Spinner";
+import Image from"next/image";
+import Link from "next/link";
+import Password from "@/public/images/icons/icon-password.svg";
+import Eyes from "@/public/images/icons/icon-eys.svg";
+import Email from "@/public/images/icons/icon-email.svg";
+import clsx from "clsx";
 
 export interface LoginData {
   email: string
@@ -13,6 +19,15 @@ export interface LoginData {
 const Login = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const { loading } = AuthStore.useState((store) => store);
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword)
+  }
+
+  const onHandleAuth = (value:'login' | 'register' | null) => {
+    storeSetModalContent(value)
+  }
 
   const onSubmit = async (data:LoginData) => {
     try {
@@ -29,33 +44,76 @@ const Login = () => {
     }
   }
   return (
-    <div className="bg-white p-[50px] space-y-[10px]">
-      <h1 className="text-center">Вход</h1>
-      <form className="flex flex-col space-y-[10px]" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            {...register('email', { required: 'Поле обязательно для заполнения' })}
-          />
-          {errors.email && <p className="text-[0.781vw] text-error m-0">{errors.email.message as string}</p>}
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Пароль"
-            {...register('password', {
-              required: 'Поле обязательно для заполнения',
-              minLength: { value: 6, message: 'Пароль должен быть мнимум 3 символа' }
+      <>
+        <h1 className="text-center text-white uppercase text-[24px]">Вход</h1>
+        <form className="flex flex-col space-y-[10px]" onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <div className="relative">
+              <input
+                type="email"
+                className="bg-[#3C445A99] text-white text-[14px] w-full border-[1px] border-[#666B8A80] rounded-[30px] px-[45px] py-[14px]"
+                placeholder="Email"
+                {...register('email', { required: 'Поле обязательно для заполнения' })}
+              />
+              <Image
+                src={Email.src}
+                width={Email.width}
+                height={Email.height}
+                alt="Иконка юзера"
+                onClick={togglePassword}
+                className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
+              />
+            </div>
+            {errors.email && <p className="text-[0.781vw] pl-[20px] text-error m-0">{errors.email.message as string}</p>}
+          </div>
+          <div>
+            <div className="relative">
+              <Image
+                src={Password.src}
+                width={Password.width}
+                height={Password.height}
+                alt="Иконка юзера"
+                onClick={togglePassword}
+                className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
+              />
+              <input
+                type={showPassword ? "text" : "password"}
+                className="bg-[#3C445A99] text-white text-[14px] w-full border-[1px] border-[#666B8A80] rounded-[30px] px-[45px] py-[14px]"
+                placeholder="Пароль"
+                {...register('password', {
+                  required: 'Поле обязательно для заполнения',
+                  minLength: { value: 6, message: 'Пароль должен быть мнимум 6 символа' }
+                })}
+              />
+              <Image
+                src={Eyes.src}
+                width={Eyes.width}
+                height={Eyes.height}
+                alt="показать пароль"
+                onClick={togglePassword}
+                className="max-w-[20px] h-[20px] right-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
+              />
+            </div>
+            {errors.password && <p className="text-[0.781vw] pl-[20px] text-error m-0">{errors.password.message as string}</p>}
+          </div>
+          <button
+            className={clsx("flex items-center justify-center gap-[10px] border-[1px] rounded-[30px] border-accent py-[15px] bg-accent uppercase text-siteDark font-bold text-[16px]", {
+              "opacity-75": loading
             })}
-          />
-          {errors.password && <p className="text-[0.781vw] text-error m-0">{errors.password.message as string}</p>}
+            type="submit"
+            disabled={loading}
+          >
+            Войти
+            {loading && <Spinner variant="small" />}
+          </button>
+        </form>
+        <div className="flex gap-[20px] justify-center text-accent">
+          <p className="text-[#9093A7]">Нет аккаунта?</p>
+          <button onClick={() => onHandleAuth("register")} type="button font-medium text-[14px] ">Зарегестрироваться</button>
         </div>
-        <button type="submit" className="border-[1px] border-accent py-[5px] bg-accent text-white">Войти</button>
-      </form>
-      {loading && <Spinner />}
-      {/*{error && <p>{error}</p>}*/}
-    </div>
+        <Link className="text-[#9093A7] block text-center pb-[3px] underline" href="#">Забыли рароль?</Link>
+        {/*{error && <p>{error}</p>}*/}
+      </>
   );
 };
 

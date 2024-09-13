@@ -97,8 +97,8 @@ export const getGiftsByDayRange = async (userData): Promise<{ name: string; opti
 
         return {
           ...data[key],
-          claimed: claimedGifts.map(item => item.options.includes(+giftDay))[0], // Подарок уже был забран
-          toClaim: getNextGayGift && +giftDay === (z + 1),   // Подарок доступен для забора
+          claimed: claimedGifts.map(item => item.options.includes(+giftDay))[0],
+          toClaim: getNextGayGift && +giftDay === (z + 1),
         };
       });
 

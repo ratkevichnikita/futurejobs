@@ -27,9 +27,9 @@ const config: Config = {
         padding: "15px",
       },
       colors: {
-        accent: "#FE4E01",
+        accent: "#FFA725",
         siteGray: "#787889",
-        siteDark: "#0D0D16",
+        siteDark: "#080D26",
         warning: "#f9e154",
         error: "#ff4d4f"
       },

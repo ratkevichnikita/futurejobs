@@ -1,20 +1,14 @@
 import React from 'react';
-import {storeSetModalActive,storeSetModalContent} from "@/src/shared/store/AuthStore";
+import Home from "@/public/images/home.webp";
+import Image from "next/image"
+import AuthModal from "@/src/app/(public)/components/Modals/AuthModal";
 
 const PublicHome = () => {
 
-  const onHandleAuth = (value:'login' | 'register' | null) => {
-    storeSetModalActive(true)
-    storeSetModalContent(value)
-  }
-
   return (
-    <div className="container">
-      <p className="text-center mb-[0.781vw]">Домашняя страница</p>
-      <div className="flex gap-[0.781vw] justify-center">
-        <button className="block border-[1px] border-accent text-accent py-[5px] px-[20px]" onClick={() => onHandleAuth('register')}>Реристрация</button>
-        <button className="block border-[1px] border-accent text-accent bg-accent text-white py-[5px] px-[20px]" onClick={() => onHandleAuth('login')}>Вход</button>
-      </div>
+    <div className="relative h-full">
+      <Image fill src={Home.src} unoptimized alt="Image" className="inset-0 z-[-1] h-full w-full rounded object-cover"/>
+      <AuthModal />
     </div>
   );
 };

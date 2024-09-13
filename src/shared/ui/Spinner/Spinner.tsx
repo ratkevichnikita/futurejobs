@@ -1,10 +1,14 @@
 import React from 'react';
-import styles from "./styles.module.css"
+import "./styles.css"
 
-const Spinner = () => {
+interface SpinnerProps {
+  variant?: string | undefined
+}
+
+const Spinner = ({variant}:SpinnerProps) => {
   return (
     <div>
-      <span className={styles.loader}></span>
+      <span className={`loader ${variant}`}></span>
     </div>
   );
 };
