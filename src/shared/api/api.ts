@@ -2,10 +2,11 @@ import axios from 'axios';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut} from "firebase/auth";
 import {auth, db} from "@/src/firebaseConfig";
 import {FirebaseUser} from "@/src/shared/types/FirebaseUser";
-import {doc, setDoc, getDoc, collection, getDocs, collectionGroup} from "firebase/firestore";
+import {doc, setDoc, getDoc, collection, getDocs, collectionGroup,updateDoc} from "firebase/firestore";
 import {RegisterData} from "@/src/app/(public)/components/Modals/AuthModal/Registration";
 import {LoginData} from "@/src/app/(public)/components/Modals/AuthModal/Login";
 import {GiftForVisiting} from "@/src/shared/types/Gifts";
+import { fromUnixTime } from 'date-fns';
 
 export const AuthRegisterUser = async (data: RegisterData) => {
   try {
@@ -31,6 +32,8 @@ export const AuthRegisterUser = async (data: RegisterData) => {
       power: 100,
       experience: 0,
       createdAt: new Date(),
+      giftsClaimed: [],
+      lastClaimedDate: null,
     });
 
     return user;
@@ -71,20 +74,38 @@ export const getUserData = async (uid: string) => {
     return null;
   }
 };
-
-export const getGiftsByDayRange = async (): Promise<{ name: string; options: any[] }[]> => {
+/**
+ *
+ * Вынести локику выдачи подарков на сервер
+ */
+export const getGiftsByDayRange = async (userData): Promise<{ name: string; options: any[] }[]> => {
   try {
     const giftsCollectionRef = collection(db, 'gifts');
     const giftsSnapshot = await getDocs(giftsCollectionRef);
 
+    const claimedGifts = userData?.giftsClaimed || [];
+
     const results: GiftForVisiting[] = [];
+    const getNextGayGift = nextDayGift(userData.lastClaimedDate.seconds)
 
     giftsSnapshot.forEach((doc) => {
       const data = doc.data();
-      const options = Object.keys(data).map((key) => data[key]);
+      const options = Object.keys(data).map((key) => {
+        const giftDay = data[key].day;
+        const y = claimedGifts.map(item => item.options.includes(+giftDay))[0];
+        const z = Math.max.apply(null, claimedGifts.map(item => item.options)[0])
+
+        return {
+          ...data[key],
+          claimed: claimedGifts.map(item => item.options.includes(+giftDay))[0], // Подарок уже был забран
+          toClaim: getNextGayGift && +giftDay === (z + 1),   // Подарок доступен для забора
+        };
+      });
+
       results.push({
         name: doc.id,
-        options: options
+        isAllClaimed: false,
+        options,
       });
     });
 
@@ -94,3 +115,28 @@ export const getGiftsByDayRange = async (): Promise<{ name: string; options: any
     return [];
   }
 };
+
+export const claimGift = async (userId: string, day: number,userData: any, name) => {
+  try {
+    if(userData.giftsClaimed.length === 0) {
+      userData.giftsClaimed.push({name,options:[day]})
+    } else {
+      userData.giftsClaimed.forEach(item => {
+        if(item.name === name) {
+          item.options.push(day)
+        }
+      })
+    }
+    console.log("Подарок успешно забран!");
+  } catch (error) {
+    console.error("Ошибка при забирании подарка:", error);
+  }
+};
+
+const nextDayGift = (userLastClaimDate) => {
+  const clickTime = new Date(userLastClaimDate * 1000);
+  const currentTime = new Date();
+  const clickDateStart = new Date(clickTime.getFullYear(), clickTime.getMonth(), clickTime.getDate());
+  const currentDateStart = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
+  return currentDateStart > clickDateStart
+}

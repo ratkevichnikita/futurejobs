@@ -1,10 +1,13 @@
 import { AuthStore } from "./AuthStore"
 import { createPullstateCore, registerInDevtools } from "pullstate"
+import {GiftsStore} from "./GiftsStore";
 
 export const PullstateCore = createPullstateCore({
-  ProfileStore: AuthStore,
+  AuthStore,
+  GiftsStore,
 })
 
 registerInDevtools({
-  ProfileStore: AuthStore,
+   AuthStore,
+  GiftsStore
 })

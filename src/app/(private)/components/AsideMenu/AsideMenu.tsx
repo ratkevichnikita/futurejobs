@@ -1,28 +1,40 @@
 "use client"
 import React, {useState} from 'react';
 import clsx from "clsx";
+import {setGiftsVisitingModalActive} from "@/src/shared/store/GiftsStore";
 
 const AsideMenu = () => {
-  const [showSideBar,setShowSideBar] = useState(false)
+  const [showSideBar,setShowSideBar] = useState(false);
+  const handleProgressReward = () => {
+    console.log("Награды за прогресс"); // Логика обработки
+  };
+
+  const handlePromoCodes = () => {
+    console.log("Промокоды"); // Логика обработки
+  };
+
+  const handleNews = () => {
+    console.log("Новости"); // Логика обработки
+  };
   const actions = [
     {
       name: "Награды за посещение",
-      handle: 'action',
+      handle: () => setGiftsVisitingModalActive(true),
       image: ''
     },
     {
       name: "Награды за прогресс",
-      handle: 'action',
+      handle: handleProgressReward,
       image: ''
     },
     {
       name: "Промокоды",
-      handle: 'action',
+      handle: handlePromoCodes,
       image: ''
     },
     {
       name: "Новости",
-      handle: 'action',
+      handle: handleNews,
       image: ''
     },
   ]
@@ -30,7 +42,7 @@ const AsideMenu = () => {
   const onSideBarHandle = () => {
     setShowSideBar(!showSideBar)
   }
-  console.log('showSideBar',showSideBar)
+
   return (
     <div className={clsx("absolute left-0 top-0 w-[30%] z-[20] duration-300 translate-x-[-100%] transition-transform text-white h-full bg-[rgba(0,0,0,0.5)]",{
       "!translate-x-0":showSideBar
@@ -41,7 +53,7 @@ const AsideMenu = () => {
           <div className="w-full grow">
             {actions.map(item => {
               return (
-                <button className="block text-left text-[12px]" type="button" key={item.name}>{item.name}</button>
+                <button onClick={item.handle} className="block text-left text-[12px]" type="button" key={item.name}>{item.name}</button>
               )
             })}
           </div>

@@ -12,10 +12,10 @@ const PrivateHome = () => {
   return (
     <div>
       <Image fill src={Main.src} unoptimized alt="Image" className="inset-0 z-10 h-full w-full rounded object-cover"/>
-      <EveryDayGiftsModal gifts={gifts} />
+      <EveryDayGiftsModal userData={userData} gifts={gifts} />
       <Header />
       <AsideMenu />
-      <div className="container">
+      <div className="container relative z-[20]">
         Основной контент
       </div>
     </div>

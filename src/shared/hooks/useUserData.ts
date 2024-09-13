@@ -17,9 +17,11 @@ export const useUserData = () => {
         try {
           setLoading(true);
           const fetchedUserData = await getUserData(user.uid);
-          const giftsData = await getGiftsByDayRange();
-          setGifts(giftsData)
           setUserData(fetchedUserData);
+          if(fetchedUserData) {
+            const giftsData = await getGiftsByDayRange(fetchedUserData);
+            setGifts(giftsData);
+          }
         } catch (err) {
           console.error('Ошибка получения данных пользователя:', err);
           setError('Не удалось загрузить данные пользователя');
