@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/src/firebaseConfig";
-import {getGiftsByDayRange, getUserData} from "@/src/shared/api/api";
 import {GiftForVisiting} from "@/src/shared/types/Gifts";
+import { UserService, GiftService } from '@/src/shared/api';
 
 export const useUserData = () => {
   const [userData, setUserData] = useState<any>(null);
@@ -16,10 +16,10 @@ export const useUserData = () => {
       if (user) {
         try {
           setLoading(true);
-          const fetchedUserData = await getUserData(user.uid);
+          const fetchedUserData = await UserService.getUserData(user.uid);
           setUserData(fetchedUserData);
           if(fetchedUserData) {
-            const giftsData = await getGiftsByDayRange(fetchedUserData);
+            const giftsData = await GiftService.getGiftsByDayRange(fetchedUserData);
             setGifts(giftsData);
           }
         } catch (err) {

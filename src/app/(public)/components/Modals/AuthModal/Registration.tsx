@@ -1,5 +1,4 @@
 import {useForm} from "react-hook-form";
-import {AuthRegisterUser} from "@/src/shared/api/api";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
 import {AuthStore, setAuthLoading, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import Spinner from "@/src/shared/ui/Spinner/Spinner";
@@ -10,6 +9,7 @@ import User from "@/public/images/icons/icon-user.svg"
 import Email from "@/public/images/icons/icon-email.svg"
 import Password from "@/public/images/icons/icon-password.svg"
 import clsx from "clsx";
+import {AuthRegisterUser} from "@/src/shared/api/services/userService";
 
 export interface RegisterData {
   nickname: string

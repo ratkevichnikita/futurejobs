@@ -1,11 +1,11 @@
 "use client"
-import { Dialog, Transition } from "@headlessui/react"
+import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
-import IconClose from "@/public/images/icons/icon-close.webp"
+import IconClose from "@/public/images/icons/icon-close.webp";
 import {GiftForVisiting} from "@/src/shared/types/Gifts";
 import {GiftsStore, setGiftsVisitingModalActive} from "@/src/shared/store/GiftsStore";
-import {claimGift} from "@/src/shared/api/api";
 import clsx from "clsx";
+import {GiftService} from "@/src/shared/api";
 
 interface ComponentProps {
   gifts: GiftForVisiting[]
@@ -16,8 +16,6 @@ const EveryDayGiftsModal = ({gifts,userData}:ComponentProps) => {
   const { giftsVisitingModalActive } = GiftsStore.useState((store) => store);
   const closeAuthModal = () => setGiftsVisitingModalActive(false)
   const userId = userData && userData?.uid;
-  console.log('userData',userData)
-  console.log('gifts',gifts)
   return (
     <Transition
       appear
@@ -60,7 +58,7 @@ const EveryDayGiftsModal = ({gifts,userData}:ComponentProps) => {
                           <div className="flex">
                             {item.options.sort((a,b) => a.day - b.day).map(el => {
                               return (
-                                <button onClick={() => claimGift(userId, +el.day, userData, item.name)}
+                                <button onClick={() =>  GiftService.claimGift({ userId, day: +el.day, userData, name: item.name, gift: el })}
                                         disabled={el.claimed || !el.toClaim}
                                         type="button" className={clsx("p-[10px] border-[1px]",{
                                           "border-accent": el.toClaim

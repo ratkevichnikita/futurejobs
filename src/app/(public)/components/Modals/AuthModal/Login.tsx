@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
-import {AuthLoginUser} from "@/src/shared/api/api";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
 import {AuthStore, setAuthLoading, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import Spinner from "@/src/shared/ui/Spinner/Spinner";
 import Image from"next/image";
-import Link from "next/link";
 import Password from "@/public/images/icons/icon-password.svg";
 import Eyes from "@/public/images/icons/icon-eys.svg";
 import Email from "@/public/images/icons/icon-email.svg";
 import clsx from "clsx";
+import {AuthLoginUser, AuthResetPassword} from "@/src/shared/api/services/userService";
 
 export interface LoginData {
   email: string
@@ -17,30 +16,35 @@ export interface LoginData {
 }
 
 const Login = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm();
   const { loading } = AuthStore.useState((store) => store);
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const togglePassword = () => {
-    setShowPassword(!showPassword)
+    setShowPassword(!showPassword);
   }
 
   const onHandleAuth = (value:'login' | 'register' | null) => {
-    storeSetModalContent(value)
+    storeSetModalContent(value);
+  }
+
+  const onResetPassHandle = () => {
+    const email = getValues("email");
+    AuthResetPassword(email);
   }
 
   const onSubmit = async (data:LoginData) => {
     try {
-      setAuthLoading(true)
-      const user = await AuthLoginUser(data)
+      setAuthLoading(true);
+      const user = await AuthLoginUser(data);
       if(user && user.accessToken) {
         setAuthData(user);
-        setAuthLoading(false)
-        reset()
+        setAuthLoading(false);
+        reset();
       }
     } catch (err:any) {
-      console.log('error', err.message)
-      setAuthLoading(false)
+      console.log('error', err.message);
+      setAuthLoading(false);
     }
   }
   return (
@@ -111,7 +115,13 @@ const Login = () => {
           <p className="text-[#9093A7]">Нет аккаунта?</p>
           <button onClick={() => onHandleAuth("register")} type="button font-medium text-[14px] ">Зарегестрироваться</button>
         </div>
-        <Link className="text-[#9093A7] block text-center pb-[3px] underline" href="#">Забыли рароль?</Link>
+        <button
+          type="button"
+          className="text-[#9093A7] pt-[5px] pl-[15px] pb-[3px] underline"
+          onClick={onResetPassHandle}
+        >
+          Забыли пароль?
+        </button>
         {/*{error && <p>{error}</p>}*/}
       </>
   );

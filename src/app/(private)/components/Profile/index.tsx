@@ -3,8 +3,8 @@ import User from '@/public/images/user.webp'
 import Image from "next/image";
 import clsx from "clsx";
 import {SetUserAuth} from "@/src/shared/store/AuthStore";
-import {AuthLogout} from "@/src/shared/api/api";
 import {getUserLevel, UserProgress} from "@/src/shared/helper/calculateUserLevel";
+import {AuthLogout} from "@/src/shared/api/services/userService";
 
 const Profile = ({name,experience,power}) => {
 
