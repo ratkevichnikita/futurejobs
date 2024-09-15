@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
-import {AuthStore, setAuthLoading, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
+import {AuthStore, setAuthLoading, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import Spinner from "@/src/shared/ui/Spinner/Spinner";
 import Image from"next/image";
 import Password from "@/public/images/icons/icon-password.svg";
 import Eyes from "@/public/images/icons/icon-eys.svg";
 import Email from "@/public/images/icons/icon-email.svg";
 import clsx from "clsx";
-import {AuthLoginUser, AuthResetPassword} from "@/src/shared/api/services/userService";
+import {UserService} from "@/src/shared/api";
 
 export interface LoginData {
   email: string
@@ -16,7 +16,7 @@ export interface LoginData {
 }
 
 const Login = () => {
-  const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const { loading } = AuthStore.useState((store) => store);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -24,19 +24,14 @@ const Login = () => {
     setShowPassword(!showPassword);
   }
 
-  const onHandleAuth = (value:'login' | 'register' | null) => {
+  const onHandleAuth = (value:'login' | null) => {
     storeSetModalContent(value);
-  }
-
-  const onResetPassHandle = () => {
-    const email = getValues("email");
-    AuthResetPassword(email);
   }
 
   const onSubmit = async (data:LoginData) => {
     try {
       setAuthLoading(true);
-      const user = await AuthLoginUser(data);
+      const user = await UserService.AuthLoginUser(data);
       if(user && user.accessToken) {
         setAuthData(user);
         setAuthLoading(false);
@@ -64,7 +59,6 @@ const Login = () => {
                 width={Email.width}
                 height={Email.height}
                 alt="Иконка юзера"
-                onClick={togglePassword}
                 className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
               />
             </div>
@@ -77,7 +71,6 @@ const Login = () => {
                 width={Password.width}
                 height={Password.height}
                 alt="Иконка юзера"
-                onClick={togglePassword}
                 className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
               />
               <input
@@ -118,7 +111,7 @@ const Login = () => {
         <button
           type="button"
           className="text-[#9093A7] pt-[5px] pl-[15px] pb-[3px] underline"
-          onClick={onResetPassHandle}
+          onClick={() => onHandleAuth("reset")}
         >
           Забыли пароль?
         </button>

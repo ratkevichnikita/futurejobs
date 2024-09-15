@@ -2,6 +2,7 @@
 import {AuthStore} from "@/src/shared/store/AuthStore";
 import Login from "@/src/app/(public)/components/Modals/AuthModal/Login";
 import Registration from "@/src/app/(public)/components/Modals/AuthModal/Registration";
+import ResetPassword from "@/src/app/(public)/components/Modals/AuthModal/ResetPassword";
 
 const AuthModal = () => {
   const {authModalContent } = AuthStore.useState((store) => store);
@@ -12,6 +13,8 @@ const AuthModal = () => {
         return <Login />
       case "register":
         return <Registration />
+      case "reset":
+        return <ResetPassword />
       default:
         return <Registration />
     }

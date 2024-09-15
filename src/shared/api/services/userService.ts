@@ -1,5 +1,5 @@
 import {RegisterData} from "@/src/app/(public)/components/Modals/AuthModal/Registration";
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile} from "firebase/auth";
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail} from "firebase/auth";
 import {auth, db} from "@/src/firebaseConfig";
 import {FirebaseUser} from "@/src/shared/types/FirebaseUser";
 import {doc, getDoc, setDoc} from "firebase/firestore";
@@ -57,9 +57,7 @@ export const AuthLogout = async () => {
 
 export const AuthResetPassword = async (email: string) => {
   try {
-    console.log('email',email)
-    // await sendPasswordResetEmail(auth, email);
-
+    return await sendPasswordResetEmail(auth, email);
   } catch (error) {
     console.log(error)
   }

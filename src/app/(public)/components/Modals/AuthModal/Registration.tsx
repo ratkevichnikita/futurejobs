@@ -1,6 +1,6 @@
 import {useForm} from "react-hook-form";
 import {setAuthData} from "@/src/shared/helper/setAuthData";
-import {AuthStore, setAuthLoading, storeSetModalActive, storeSetModalContent} from "@/src/shared/store/AuthStore";
+import {AuthStore, setAuthLoading, storeSetModalContent} from "@/src/shared/store/AuthStore";
 import Spinner from "@/src/shared/ui/Spinner/Spinner";
 import React, {useState} from "react";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import User from "@/public/images/icons/icon-user.svg"
 import Email from "@/public/images/icons/icon-email.svg"
 import Password from "@/public/images/icons/icon-password.svg"
 import clsx from "clsx";
-import {AuthRegisterUser} from "@/src/shared/api/services/userService";
+import {UserService} from "@/src/shared/api";
 
 export interface RegisterData {
   nickname: string
@@ -26,14 +26,14 @@ const Register = () => {
     setShowPassword(!showPassword)
   }
 
-  const onHandleAuth = (value:'login' | 'register' | null) => {
+  const onHandleAuth = (value: 'register' | null) => {
     storeSetModalContent(value)
   }
 
   const onSubmit = async (data:RegisterData) => {
     try {
       setAuthLoading(true)
-      const user = await AuthRegisterUser(data);
+      const user = await UserService.AuthRegisterUser(data);
       if(user && user.accessToken) {
         setAuthData(user);
         setAuthLoading(false)
@@ -68,7 +68,6 @@ const Register = () => {
               width={User.width}
               height={User.height}
               alt="Иконка юзера"
-              onClick={togglePassword}
               className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
             />
           </div>
@@ -87,7 +86,6 @@ const Register = () => {
               width={Email.width}
               height={Email.height}
               alt="Иконка юзера"
-              onClick={togglePassword}
               className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
             />
           </div>
@@ -100,7 +98,6 @@ const Register = () => {
               width={Password.width}
               height={Password.height}
               alt="Иконка юзера"
-              onClick={togglePassword}
               className="max-w-[20px] h-[20px] left-[15px] cursor-pointer absolute top-[50%] translate-y-[-50%]"
             />
             <input

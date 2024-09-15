@@ -5,7 +5,7 @@ interface AuthStoreProps {
   user: FirebaseUser | null
   loading: boolean
   authModalActive: boolean
-  authModalContent: 'login' | 'register' | null
+  authModalContent: 'login' | 'register' | 'reset' | null
   userData: any
 }
 
@@ -15,7 +15,7 @@ export const storeSetModalActive = (value: boolean) => {
   })
 }
 
-export const storeSetModalContent = (value: 'login' | 'register' | null) => {
+export const storeSetModalContent = (value: 'login' | 'register' | 'reset' | null) => {
   AuthStore.update((store) => {
     store.authModalContent = value
   })
