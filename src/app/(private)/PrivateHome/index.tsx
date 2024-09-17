@@ -5,6 +5,7 @@ import {useUserData} from "@/src/shared/hooks/useUserData";
 import EveryDayGiftsModal from "@/src/app/(private)/Modals/EverydayGifts";
 import AsideMenu from "@/src/app/(private)/components/AsideMenu/AsideMenu";
 import Main from "@/public/images/main.webp";
+import OnlineChat from "@/src/app/(private)/Modals/OnlineChat";
 
 const PrivateHome = () => {
   const { userData, gifts } = useUserData();
@@ -13,6 +14,7 @@ const PrivateHome = () => {
     <div>
       <Image fill src={Main.src} unoptimized alt="Image" className="inset-0 z-10 h-full w-full rounded object-cover"/>
       <EveryDayGiftsModal userData={userData} gifts={gifts} />
+      <OnlineChat userData={userData} />
       <Header />
       <AsideMenu />
       <div className="container relative z-[20]">
